@@ -14,7 +14,7 @@ function App() {
   const [date, setdate] = useState(allinone_time.getDate());
 
   let monthString, dayString;
-
+  const inptelem = document.getElementById("imptelem");
   const switchDateandTime = () => {
     switch (month) {
       case 0:
@@ -99,6 +99,8 @@ function App() {
   };
 
   const [lock, setlock] = useState(true);
+  const [inptclear,setinptclear]=useState(false);
+  const [password, setpassword] = useState("");
   const [firstlock, setfirstlock] = useState(true);
   const [about, setabout] = useState(false);
   const [fullScreen, setfullscreen] = useState({
@@ -134,12 +136,33 @@ function App() {
     setZIndexes(newZIndexes);
   };
 
+  const handleAuth=()=>{
+    if(password==="1234"){
+      setfirstlock(false);
+      setlock(false);
+      setinptclear(true);
+    }else{
+      alert("wrong password");
+      setpassword("");
+      setinptclear(true);
+    }
+  }
+  
+
   setTimeout(() => {
     setDateandTime();
   }, 1000 * 60);
   return (
     <div className="App">
-      <div className={lock === true ? (firstlock?"first-lockscreen":"lockscreen") : "lockscreen-unlock"}>
+      <div
+        className={
+          lock === true
+            ? firstlock
+              ? "first-lockscreen"
+              : "lockscreen"
+            : "lockscreen-unlock"
+        }
+      >
         <div className="lockscreen-clock">
           <h3 style={{ textShadow: "0px 0px 10px grey" }}>
             {dayString}, {monthString} {date}
@@ -168,6 +191,10 @@ function App() {
             }}
           >
             <input
+              id="imptelem"
+              onChange={(e) => {setpassword(e.target.value);
+                
+              }}
               style={{
                 borderRadius: "15px",
                 height: "25px",
@@ -183,8 +210,10 @@ function App() {
             <div
               style={{ marginInline: "10px", paddingBlock: "5px" }}
               onClick={() => {
-                setfirstlock(false);
-                setlock(false);
+                handleAuth();
+                setpassword("");
+                // inptclear?(clearinpt(e)):(setinptclear(false));
+                inptelem.value="";
               }}
             >
               <img
@@ -224,7 +253,17 @@ function App() {
           <img src={logo} alt="" />
         </div>
         <div className="right-top-bar">
-          <div onClick={()=>{setlock(true)}}  style={{height:"15px",marginInline:"15px",filter:" grayscale(1) invert(1)",marginBlock:"auto"}}>
+          <div
+            onClick={() => {
+              setlock(true);
+            }}
+            style={{
+              height: "15px",
+              marginInline: "15px",
+              filter: " grayscale(1) invert(1)",
+              marginBlock: "auto",
+            }}
+          >
             <img
               src="https://eshop.macsales.com/blog/wp-content/uploads/2021/03/control-center-icon.png"
               alt=""
@@ -232,10 +271,9 @@ function App() {
             />
           </div>
           <div>
-          {" "}{dayString} {date} {monthString} {hrs}:{minutes}{" "}
-
+            {" "}
+            {dayString} {date} {monthString} {hrs}:{minutes}{" "}
           </div>
-          
         </div>
       </div>
       <div
@@ -577,7 +615,7 @@ function App() {
       </div>
 
       <div className="dock-container">
-        <div className="dock">  
+        <div className="dock">
           <div
             className="icon-wrapper"
             onClick={() => {
@@ -586,8 +624,6 @@ function App() {
             }}
           >
             <div className="icon dock-icon-1"> </div>
-            
-            
           </div>
           <div
             className="icon-wrapper"
